@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 require("dotenv/config");
+require("./shared/service/TranslationsYup");
 const express_1 = __importDefault(require("express"));
 const routes_1 = require("./routes");
 const app = (0, express_1.default)();
