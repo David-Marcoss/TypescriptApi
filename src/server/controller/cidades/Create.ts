@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as yup from "yup"
 import { validation } from "../../shared/middleware";
+import statusCodes from "http-status-codes"
 
 interface ICidades{
     nome:string,
@@ -17,5 +18,5 @@ export const createValidation = validation({
 
 export async function create(req: Request<{},{},ICidades>, res: Response){
 
-    return res.send("Rota Create Cidades")
+    return res.status(statusCodes.CREATED).json({id: 1})
 }

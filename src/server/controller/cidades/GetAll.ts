@@ -21,5 +21,5 @@ export const getAllValidation = validation({
 
 export async function getAll(req: Request<{},{},{},IQueryProps>, res: Response){
 
-    return res.send("Rota getAll Cidades")
+    return res.json([])
 }

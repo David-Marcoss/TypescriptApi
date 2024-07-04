@@ -50,6 +50,6 @@ export const validation: Tvalidation = (schemas) =>
         if(Object.entries(errorResult).length == 0) 
             return next()
         else 
-            return res.status(400).json(errorResult)
+            return res.status(400).json({erros: errorResult})
         
     }
