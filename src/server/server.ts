@@ -10,7 +10,4 @@ app.use(express.json())
 
 app.use(router)
 
-console.log(
-    Knex("cidades").select("*"))
-
 export {app}

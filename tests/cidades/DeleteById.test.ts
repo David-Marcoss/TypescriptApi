@@ -3,7 +3,13 @@ import statusCodes from "http-status-codes"
 
 describe("delete Cidades by Id", () => {
     it("should successfully delete cidades by Id", async () => {
-        const id = 1
+        const res = await testServer
+        .post("/cidades")
+        .send({
+            nome: "Picos"
+        })
+
+        const id = res.body.id
 
         let response =  await testServer.delete("/cidades/" + id ).send()
         expect(response.statusCode).toBe(statusCodes.OK)

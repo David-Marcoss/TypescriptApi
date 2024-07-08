@@ -3,7 +3,13 @@ import statusCodes from "http-status-codes"
 
 describe("Update Cidades by Id", () => {
     it("should successfully Update cidades by Id", async () => {
-        const id = 1
+        const res = await testServer
+        .post("/cidades")
+        .send({
+            nome: "Picos"
+        })
+
+        const id = res.body.id
         const data = {
             nome: "teste"
         }
