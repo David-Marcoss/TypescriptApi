@@ -10,9 +10,13 @@ function startApp (){
 
 
 if (process.env.IS_LOCALHOST !== "true"){
-    Knex.migrate.latest()
+    Knex.seed.run().then( () => {
+        Knex.migrate.latest()
         .then( () => startApp())
         .catch( error => console.log(error))
+    })
+    .catch( error => console.log(error))
+
 }else{
     startApp()
 }
