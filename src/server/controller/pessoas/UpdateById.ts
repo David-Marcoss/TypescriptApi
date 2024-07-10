@@ -48,7 +48,7 @@ export async function updateById(req: Request, res: Response){
         return res.status(StatusCodes.OK).send()
     }else{
         return res.status(StatusCodes.NOT_FOUND).json({errors:{
-            default: "Cidade não encontrada"
+            default: "Pessoa não encontrada"
         }})
     }
     

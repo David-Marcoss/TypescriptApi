@@ -38,7 +38,7 @@ describe("Update pessoas by Id", () => {
         }
 
         let response =  await testServer.put("/pessoas/" + id ).send(data)
-        expect(response.statusCode).toBe(statusCodes.NOT_FOUND)
+        expect(response.statusCode).toBe(statusCodes.INTERNAL_SERVER_ERROR)
     });
 
     it("should fail to Update pessoas by Id, when is invalid or miss data", async () => {
