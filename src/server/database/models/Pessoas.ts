@@ -1,6 +1,6 @@
 
 
-export interface ICidades{
+export interface IPessoas{
     id: number,
     nomeCompleto: string,
     email: string,
