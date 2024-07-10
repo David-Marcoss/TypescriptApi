@@ -1,22 +1,23 @@
-import { IPessoas } from "../../src/server/database/models";
 import {testServer} from "../jest.setup"
 import statusCodes from "http-status-codes"
 
-
-
-
 describe("Create pessoas", () => {
-    it("should successfully create a new pessoa", async () => {
+    let cidadeId: number | undefined= undefined
+    beforeAll(async () => {
         const insertCidade =  await testServer
-            .post("/cidades")
-            .send({
-                nome: "Picos"
-            })
-        
-        const data:Omit<IPessoas,"id"> = {
+        .post("/cidades")
+        .send({
+            nome: "Picos"
+        })
+
+        cidadeId =  insertCidade.body.id
+    })
+
+    it("should successfully create a new pessoa", async () => {
+        const data = {
             nomeCompleto: "testador junior",
             email: "testador@gmail.com",
-            cidadeId: insertCidade.body.id
+            cidadeId: cidadeId
         }
 
         const response =  await testServer.post("/pessoas").send(data)
@@ -25,16 +26,10 @@ describe("Create pessoas", () => {
         expect(response.body).toHaveProperty("id")
     });
 
-    it("should fail to create a new pessoa when required fields are missing", async () => {
-        const insertCidade =  await testServer
-        .post("/cidades")
-        .send({
-            nome: "Picos"
-        })
-        
+    it("should fail to create a new pessoa when required fields are missing", async () => {        
         const data= {
             email: "testador@gmail.com",
-            cidadeId: insertCidade.body.id
+            cidadeId: cidadeId
         }
 
         const response =  await testServer.post("/pessoas").send(data)
@@ -45,7 +40,7 @@ describe("Create pessoas", () => {
 
     it("should fail to create a new pessoa when cidadeId does not exist", async () => {
       
-        const data:Omit<IPessoas,"id"> = {
+        const data = {
             nomeCompleto: "testador junior",
             email: "testador@gmail.com",
             cidadeId: 9999
@@ -58,17 +53,11 @@ describe("Create pessoas", () => {
     });
 
     it("should fail to create a new pessoa when email already registed", async () => {
-      
-        const insertCidade =  await testServer
-        .post("/cidades")
-        .send({
-            nome: "Picos"
-        })
-        
-        const data:Omit<IPessoas,"id"> = {
+              
+        const data = {
             nomeCompleto: "testador junior",
             email: "testador@gmail.com",
-            cidadeId: insertCidade.body.id
+            cidadeId: cidadeId
         }
 
         let response =  await testServer.post("/pessoas").send(data)
@@ -76,7 +65,5 @@ describe("Create pessoas", () => {
         response =  await testServer.post("/pessoas").send(data)
 
         expect(response.statusCode).toBe(statusCodes.INTERNAL_SERVER_ERROR)
-        
     });
-    
 });
