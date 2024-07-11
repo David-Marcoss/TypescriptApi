@@ -10,7 +10,7 @@ export async function up(knex: Knex) {
       table.bigIncrements('id').primary().index();
       table.string('nome').notNullable();
       table.string('email').unique().index().notNullable();
-      table.string('password').checkLength(">=",8).index().notNullable();
+      table.string('senha').checkLength(">=",8).index().notNullable();
 
       
       table.comment('Tabela usada para armazenar usuarios do sistema.');

@@ -1,4 +1,4 @@
 
 // funcionalidades extras do sistema
 
-export {}
+export * from "./generatePasswordHash"
