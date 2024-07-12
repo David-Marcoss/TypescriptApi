@@ -26,6 +26,7 @@ export const getAllValidation = validation({
 export async function getAll(req: Request<{},{},{},IQueryProps>, res: Response){
     let {filter,limit,page,id} = req.query
 
+
     const result = await CidadesProvider.getAll(
         filter= filter || "",
         page= page || 1,

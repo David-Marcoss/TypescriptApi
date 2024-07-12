@@ -44,7 +44,7 @@ export async function login(req: Request<{}, {}, IBodyProps>, res: Response): Pr
         }
 
         const privateKey = process.env.PRIVATE_KEY || "default_private_key";
-        const token = jwt.sign({ id: user.id }, privateKey, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.id }, privateKey, { expiresIn: '1h' });
 
         return res.status(StatusCodes.OK).json({ token });
 

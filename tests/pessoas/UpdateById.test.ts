@@ -3,9 +3,31 @@ import {testServer} from "../jest.setup"
 import statusCodes from "http-status-codes"
 
 describe("Update pessoas by Id", () => {
+    let token: string | undefined
+
+    beforeAll(async () => {
+
+        let userData = {
+            "email": `${new Date()}@gmail.com`,
+            "nome": "Testador",
+            "senha": "senha123"
+        }
+
+        await testServer.post("/usuarios").send(userData)
+
+        const response = await testServer.post("/login").send({
+            email: userData.email,
+            senha: userData.senha
+        })
+
+        token = response.body.token
+    })
+
     it("should successfully Update pessoas by Id", async () => {
         const insertCidade =  await testServer
             .post("/cidades")
+            
+            .set({authorization:token})
             .send({
                 nome: "Picos"
             })
@@ -16,7 +38,9 @@ describe("Update pessoas by Id", () => {
             cidadeId: insertCidade.body.id
         }
 
-        const res =  await testServer.post("/pessoas").send(insertPessoa)
+        const res =  await testServer.post("/pessoas")
+        .set({authorization:token})
+        .send(insertPessoa)
 
         const id = res.body.id
         const updatePessoa:Omit<IPessoas,"id"> = {
@@ -25,7 +49,9 @@ describe("Update pessoas by Id", () => {
             cidadeId: insertCidade.body.id
         }
 
-        let response =  await testServer.put("/pessoas/" + id ).send(updatePessoa)
+        let response =  await testServer.put("/pessoas/" + id )
+        .set({authorization:token})
+        .send(updatePessoa)
         expect(response.statusCode).toBe(statusCodes.OK)
     });
 
@@ -37,13 +63,17 @@ describe("Update pessoas by Id", () => {
             cidadeId: 999
         }
 
-        let response =  await testServer.put("/pessoas/" + id ).send(data)
+        let response =  await testServer.put("/pessoas/" + id )
+        .set({authorization:token})
+        .send(data)
         expect(response.statusCode).toBe(statusCodes.INTERNAL_SERVER_ERROR)
     });
 
     it("should fail to Update pessoas by Id, when is invalid or miss data", async () => {
         const insertCidade =  await testServer
             .post("/cidades")
+            
+            .set({authorization:token})
             .send({
                 nome: "Picos"
             })
@@ -54,7 +84,9 @@ describe("Update pessoas by Id", () => {
             cidadeId: insertCidade.body.id
         }
 
-        const res =  await testServer.post("/pessoas").send(insertPessoa)
+        const res =  await testServer.post("/pessoas")
+        .set({authorization:token})
+        .send(insertPessoa)
 
         const id = res.body.id
         const updatePessoa = {
@@ -63,11 +95,15 @@ describe("Update pessoas by Id", () => {
             cidadeId: "invlido"
         }
 
-        let response =  await testServer.put("/pessoas/" + id ).send(updatePessoa)
+        let response =  await testServer.put("/pessoas/" + id )
+        .set({authorization:token})
+        .send(updatePessoa)
         expect(response.statusCode).toBe(statusCodes.BAD_REQUEST)
         expect(response.body).toHaveProperty("erros")
 
-        response =  await testServer.put("/pessoas/" + id ).send({})
+        response =  await testServer.put("/pessoas/" + id )
+        .set({authorization:token})
+        .send({})
         expect(response.statusCode).toBe(statusCodes.BAD_REQUEST)
         expect(response.body).toHaveProperty("erros.body")
 
@@ -79,13 +115,17 @@ describe("Update pessoas by Id", () => {
             nome: "teste"
         }
 
-        let response =  await testServer.put("/pessoas/" + id ).send(data)
+        let response =  await testServer.put("/pessoas/" + id )
+        .set({authorization:token})
+        .send(data)
         expect(response.statusCode).toBe(statusCodes.BAD_REQUEST)
         expect(response.body).toHaveProperty("erros.params.id")
 
         id = -1
 
-        response =  await testServer.put("/pessoas/" + id ).send(data)
+        response =  await testServer.put("/pessoas/" + id )
+        .set({authorization:token})
+        .send(data)
         expect(response.statusCode).toBe(statusCodes.BAD_REQUEST)
         expect(response.body).toHaveProperty("erros.params.id")
     });
